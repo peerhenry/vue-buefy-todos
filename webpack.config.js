@@ -3,20 +3,20 @@ const merge = require("webpack-merge")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const VueLoaderPlugin = require("vue-loader/lib/plugin")
 
-function resolve(relativePath){
-  return path.join(__dirname, relativePath);
+function resolvePath(relativePath){
+  return path.resolve(__dirname, relativePath);
 }
 
 // Config parts
 
 const entry = {
-  entry: resolve('src/main.js')
+  entry: resolvePath('src/main.js')
 }
 
 const output = {
   output: {
     filename: 'bundle.js',
-    path: resolve('dist')
+    path: resolvePath('dist')
   }
 }
 
@@ -66,13 +66,22 @@ function mode(env){
   }
 }
 
+const resolve = {
+  resolve: {
+    alias: {
+      Common: path.resolve(__dirname, 'src/common/')
+    }
+  }
+}
+
 // Config composition
 
 const common = merge(
   entry,
   loaders,
   htmlPlugin,
-  vuePlugin
+  vuePlugin,
+  resolve 
 )
 
 const production = merge(
